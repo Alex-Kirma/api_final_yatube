@@ -13,7 +13,7 @@ class PostSerializer(serializers.ModelSerializer):
     author = SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'text', 'author', 'image', 'group', 'pub_date')
         model = Post
 
 
@@ -32,7 +32,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         read_only_fields = ('post', )
-        fields = '__all__'
+        fields = ('id', 'author', 'post', 'text', 'created')
         model = Comment
 
 
@@ -49,11 +49,6 @@ class FollowSerializer(serializers.ModelSerializer):
         queryset=User.objects.all()
     )
 
-    def validate(self, data):
-        if self.context['request'].user == data['following']:
-            raise serializers.ValidationError('Подписка на себя запрещена')
-        return data
-
     class Meta:
         fields = ('id', 'user', 'following')
         model = Follow
@@ -64,3 +59,9 @@ class FollowSerializer(serializers.ModelSerializer):
                 fields=('user', 'following')
             )
         ]
+
+    def validate_following(self, value):
+        user = self.context.get('request').user
+        if user == value:
+            raise serializers.ValidationError('Подписка на себя запрещена')
+        return value
