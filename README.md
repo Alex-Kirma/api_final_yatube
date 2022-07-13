@@ -1,39 +1,109 @@
-# api_final
-Данный проект api final yatube предназначен для работы с апи сервиса. При запросе через через программу Postman можно добавлять новые посты и комментарии, исправлять, удалять их. Получать список сообществ, отдельные сообщества. Также с помощью данного програмного обеспечения можно получить, обновить и проверить токен для доступа к сервису. По мере улучшения работы сервиса будут добавляться новые возможности и функции.
-Для разворачивания проекта на локальной машине необходимо: Скачать ссылку репозитория на проект, с помощью команды git clone <ссылка> склонировать проект. Далее необходимо создать и активировать виртуальное окружение: 
-python3 -m venv env. 
-source env/bin/activate
-Установить зависимости из файла requirements.txt:
-python3 -m pip install --upgrade pip
+# Социальная сеть Yatube API
+Социальная сеть, в которой реализованы следующие возможности: публикация новых записей, комментирование, исправление и их удаление, получение списка сообществ, отдельные сообщества. Также реализована возможность подписываться и отписываться от авторов, получение, обновление и проверка токенов для доступа к сервису.
+
+## Технологии
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/P?color=brightgreen&label=Pyton)
+![PyPI - Python Version](https://img.shields.io/badge/Django-3.2-brightgreen)
+![PyPI - Python Version](https://img.shields.io/badge/Django%20Rest%20Framework-brightgreen)
+![DWT](https://img.shields.io/badge/JWT-%20brightgreen)
+![Djoser](https://img.shields.io/badge/Djoser-%20brightgreen)
+
+
+## Установка и запуск проекта
+
++ Клонировать репозиторий.
+```bash
+git clone git@github.com:Alex-Kirma/api_final_yatube.git
+```
++ Установить и активировать виртуальное окружение(версия python 3.7).
+```bash
+python3 -3.7 -m venv venv
+. venv/scripts/activate
+```
++ Обновить менеджер пакетов pip.
+```bash
+python -m pip install --upgrade pip
+```
++ Установить зависимости из файла requirements.txt.
+```bash
 pip install -r requirements.txt
-Выполнить миграции:
-python3 manage.py migrate
-Установить необходимые библиотеки:
-pip install djangorestframework
-pip install djoser djangorestframework_simplejwt.
-Запустить сервер python manage.py runserver
-Примеры запросов к api сервиса:
-Get запрос по этому адресу http://127.0.0.1:8000/api/v1/posts/ выдаст 
+```
++ Сделать миграции.
+```bash
+python manage.py migrate
+```
++ Создать суперпользователя.
+```bash
+python manage.py createsuperuser
+```
++ Запустить проект:
+```bash
+python manage.py runserver
+```
+## Примеры работы с API сервиса для всех пользователей.
+Для неавторизованных пользователей работа с API доступна в режиме только для чтения.
+```
+GET api/v1/posts/ - получить список всех публикаций.
+
+GET api/v1/posts/{id}/ - получение публикации по id
+
+GET api/v1/groups/ - получение списка доступных сообществ
+
+GET api/v1/groups/{id}/ - получение информации о сообществе по id
+
+GET api/v1/{post_id}/comments/ - получение всех комментариев к публикации
+
+GET api/v1/{post_id}/comments/{id}/ - Получение комментария к публикации по id
+```
+## Примеры работы с API для авторизованных пользователей
+Создание публикации:
+```
+POST /api/v1/posts/
+```
+в body { "text": "string", "image": "string", "group": 0 }
+
+Обновление публикации:
+```
+PUT /api/v1/posts/{id}/
+```
+PATCH /api/v1/posts/{id}/
+
+Частичное обновление публикации:
+
+```
+PATCH /api/v1/posts/{id}/
+```
+в body { "text": "string", "image": "string", "group": 0 }
+
+Удаление публикации:
+```
+DEL /api/v1/posts/{id}/
+```
+Доступ авторизованным пользователем доступен по JWT-токену (Joser), который можно получить выполнив POST запрос по адресу:
+```
+POST /api/v1/jwt/create/
+```
+в body:
+
 {
-"count": 123,
-"next": "http://api.example.org/accounts/?offset=400&limit=100",
-"previous": "http://api.example.org/accounts/?offset=200&limit=100",
-"results": [
-{}
-]
+"username": "string",
+"password": "string"
 }
-Post запрос 
-{
-"text": "string",
-"image": "string",
-"group": 0
-}
-выдаст ответ 
-{
-"id": 0,
-"author": "string",
-"text": "string",
-"pub_date": "2019-08-24T14:15:22Z",
-"image": "string",
-"group": 0
-}
+
+Полученный токен добавляем в headers (postman), после чего буду доступны все функции проекта:
+
+```
+Authorization: Bearer {your_token}
+```
+Обновление JWT-токена:
+
+```
+POST /api/v1/jwt/refresh/ - обновление JWT-токена
+```
+
+## Автор: Кырма Алексей.
+
+
+
+
+ Get запрос по этому адресу http://127.0.0.1:8000/api/v1/posts/ выдаст { "count": 123, "next": "http://api.example.org/accounts/?offset=400&limit=100", "previous": "http://api.example.org/accounts/?offset=200&limit=100", "results": [ {} ] } Post запрос { "text": "string", "image": "string", "group": 0 } выдаст ответ { "id": 0, "author": "string", "text": "string", "pub_date": "2019-08-24T14:15:22Z", "image": "string", "group": 0 }
