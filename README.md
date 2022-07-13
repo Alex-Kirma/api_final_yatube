@@ -100,10 +100,6 @@ Authorization: Bearer {your_token}
 ```
 POST /api/v1/jwt/refresh/ - обновление JWT-токена
 ```
+Все виды запросов достуны в документации по эндпоинту: /redoc
 
 ## Автор: Кырма Алексей.
-
-
-
-
- Get запрос по этому адресу http://127.0.0.1:8000/api/v1/posts/ выдаст { "count": 123, "next": "http://api.example.org/accounts/?offset=400&limit=100", "previous": "http://api.example.org/accounts/?offset=200&limit=100", "results": [ {} ] } Post запрос { "text": "string", "image": "string", "group": 0 } выдаст ответ { "id": 0, "author": "string", "text": "string", "pub_date": "2019-08-24T14:15:22Z", "image": "string", "group": 0 }
